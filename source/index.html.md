@@ -1,15 +1,9 @@
 ---
 title: API Reference
 
-language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  # - ruby
-  # - python
-  # - javascript
-
-# toc_footers:
-#   - <a href='#'>Sign Up for a Developer Key</a>
-#   - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
+toc_footers:
+  - <a href='#'>Sign Up for a Developer Key</a>
+  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
@@ -17,235 +11,153 @@ includes:
 search: true
 
 code_clipboard: true
+
+meta:
+  - name: description
+    content: Documentation for the EnayaPay API
 ---
 
 # Introduction
 
-Welcome to the EnayaPay API! You can use our API to access Payment API endpoints, which can get information on various transactions, making a payment to various providers like card transfer,telecom services and electricity.
-
-We have language bindings in Shell, Rest Api! You can view code examples in the dark area to the right.
-
-
-# Authentication
-
-> To authorize, use this code:
-
-<!-- ```ruby
-require 'Enaya'
-
-api = Enaya::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import Enaya
-
-api = Enaya.authorize('f5db97dc-de22-4a4b-bc22-c8725e5f69e4')
-``` -->
+Welcome to the EnayaPay API! You can use our API to access EnayaPay API endpoints.
+# Register
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "app-key: f5db97dc-de22-4a4b-bc22-c8725e5f69e4"\
-  "secret-key":"f5db97dc-de22-4a4b-bc22-c8725e5f69e4"\
-  "platform":"web" 
-```
-<!-- 
-```javascript
-const Enaya = require('Enaya');
-
-let api = Enaya.authorize('f5db97dc-de22-4a4b-bc22-c8725e5f69e4');
-``` -->
-
-> Make sure to replace `f5db97dc-de22-4a4b-bc22-c8725e5f69e4` with your API key. just this is sample api key. contact your account manager to give you the api key.
-
-Enaya uses APP keys and Secret Key to allow access to the API. You can register a new Enaya API key at our [developer portal](http://enayapay.com/).
-
-Enaya expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`app-key: f5db97dc-de22-4a4b-bc22-c8725e5f69e4`
-
-<aside class="notice">
-You must replace <code>f5db97dc-de22-4a4b-bc22-c8725e5f69e4</code> with your personal API key.
-</aside>
-
-# Transfer
-
-## Transfer from card to another
-
-<!-- 
-```ruby
-require 'Enaya'
-
-api = Enaya::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+curl "https://sandbox.enayapay.com/api/v2.1/register/" \
+  -H "x-api-key: gffdgdfgdfgdfgdfgdgd"
 ```
 
-```python
-import Enaya
-
-api = Enaya.authorize('meowmeowmeow')
-api.kittens.get()
-``` -->
-
-```shell
- curl -d '{
-	"amount":455,
-	"from_card":"4342423432423425",
-	"to_card":"5525 5555 5555 5555",
-	"expiration_date":"0921",
-	"phone_number":"249***********",
-	"ipin":"errwqrweradwdsDSDSDDSDsadAS",
-	"uuid":"rt55fgfgdssdggdfgdsdsgd"
-}' -H "Content-Type: application/json"  -X POST https://sandbox.platform.enayapay.com/api/v2.2/transfer/ 
-```
-
-<!-- ```javascript
-const Enaya = require('Enaya');
-
-let api = Enaya.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-``` -->
-
-> The above command returns JSON structured like this:
-
-```json
-{
-	"from_card": "************3425",
-	"to_card": "***************5555",
-	"amount": 455.0,
-	"response_status": "Successful",
-	"enaya_fee": 0.05
-} 
-```
-
-This endpoint transfers amount from card to another.
+> Make sure to replace `gffdgdfgdfgdfgdfgdgd` with your API key.
 
 ### HTTP Request
 
-`POST https://sandbox.platform.enayapay.com/api/v2.2/transfer`
+`POST https://sandbox.enayapay.com/api/v2.1/register/`
+## Headers
+```json
+ {
+    "x-api-key": "fddfgdfgdfgdfgdfg"
+  }
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-amount | double | Amount to be transfered.
-from_card | string | card to pay with.
-phone_number | string | receiver number.
-to_card | string | card to be transfer the amount to or card that recieve the amount.
-expiration_date | string | expiration date of the from card, and it should be in format 0921 or mmyy.
-ipin | string | ipin of the card to be pay with and it should be send ecnrypted.
-uuid | string | uuid string ti be unique for each transaction.
-
-<!-- <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside> -->
-<!-- 
-## Get a Specific Kitten
-
-```ruby
-require 'Enaya'
-
-api = Enaya::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
 ```
+## Body
+```json
+ {
+    "user_phone": "2499++++++++",
+    "user_name": "doctor",
+    "user_password": "calicofdhfdsfsd"
+  }
 
-```python
-import Enaya
 
-api = Enaya.authorize('meowmeowmeow')
-api.kittens.get(2)
 ```
+### Parameters Description
+Parameter | Default | Description | Type
+--------- | ------- | ----------- | ----------
+user_phone | required | user phone number | String
+user_name | required | userName of user | String
+user_password | required | user password | String
+
+
+## Response 
+StatusCode | Response Data | Description  
+--------- | ------- | ---------
+201 | None | user created and otp will send in phone number
+302 | None | user already registered
+333 | `` {"details" : "your number not valid"} ``| phone number of user not valid
+400 | `` { "details": {"user_password": [ "This field is required."]} } `` | Bad request occurred when forget parameter
+502 | ```{"details" : "bad getway" }``` |  bad getway of sms getway
+503 | ``` {"details" :"service not available"} ``` | when service not available
+
+
+# verify
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
+# With shell, you can just pass the correct header with each request
+curl "https://sandbox.enayapay.com/api/v2.1/verify/" \
+  -H "x-api-key: gffdgdfgdfgdfgdfgdgd"
 ```
 
-```javascript
-const Enaya = require('Enaya');
-
-let api = Enaya.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+> Make sure to replace `gffdgdfgdfgdfgdfgdgd` with your API key.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`POST https://sandbox.enayapay.com/api/v2.1/verify/`
+## Headers
+```json
+ {
+    "x-api-key": "fddfgdfgdfgdfgdfg"
+  }
 
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'Enaya'
-
-api = Enaya::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
 ```
+## Body
+```json
+ {
+    "user_phone": "2499++++++++",
+    "user_otp": "454345"
+  }
 
-```python
-import Enaya
 
-api = Enaya.authorize('meowmeowmeow')
-api.kittens.delete(2)
 ```
+### Parameters Description
+Parameter | Default | Description | Type
+--------- | ------- | ----------- | ----------
+user_phone | required | user phone number | String
+user_otp | required | otp of user | String
+
+
+## Response 
+StatusCode | Response Data | Description  
+--------- | ------- | ---------
+200 | ``` {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjU3NTMwNyIsImV4cGlyeSI6IjIwMjEtMTEtMTMifQ.2uU8eOnw8biYxH55EblrTHOz5nM4rcP1kiIa7S46mFs","user_name": "doctor"} ```| user verified
+203 | None | wrong otp
+400 | ``{ "details": {"user_otp": ["This field is required."]} }``| Bad request occurred when forget parameter 
+401 | None | your api key not valid
+404 | ``` {"details": "user not registered"} ``` | user not register
+503 | ``` {"details" :"service not available"} ``` | when service not available
+
+
+# login
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
+# With shell, you can just pass the correct header with each request
+curl "https://sandbox.enayapay.com/api/v2.1/login/" \
+  -H "x-api-key: gffdgdfgdfgdfgdfgdgd"
 ```
 
-```javascript
-const Enaya = require('Enaya');
-
-let api = Enaya.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
+> Make sure to replace `gffdgdfgdfgdfgdfgdgd` with your API key.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST https://sandbox.enayapay.com/api/v2.1/login/`
+## Headers
+```json
+ {
+    "x-api-key": "fddfgdfgdfgdfgdfg"
+  }
 
-### URL Parameters
+```
+## Body
+```json
+ {
+    "user_phone": "2499++++++++",
+    "user_password": "dfdfsdfdsfs"
+  }
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+
+```
+### Parameters Description
+Parameter | Default | Description | Type
+--------- | ------- | ----------- | ----------
+user_phone | required | user phone number | String
+user_password | required | password of user | String
 
 
-
-
----------------- -->
-
+## Response 
+StatusCode | Response Data | Description  
+--------- | ------- | ---------
+200 | ``` {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjU3NTMwNyIsImV4cGlyeSI6IjIwMjEtMTEtMTMifQ.2uU8eOnw8biYxH55EblrTHOz5nM4rcP1kiIa7S46mFs","user_name": "doctor","status": "active"} ```| user authorized
+203 | None | wrong password
+400 | ``{ "details": {"user_password": ["This field is required."]} }``| Bad request occurred when forget parameter 
+401 | None | your api key not valid
+404 | ``` {"details": "user not registered"} ``` | user not register
+503 | ``` {"details" :"service not available"} ``` | when service not available
